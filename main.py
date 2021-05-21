@@ -3,8 +3,17 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import efficientnet.tfkeras
 
-model = tf.keras.models.load_model('model')
+
+with open("model\model.json") as json_file:
+    json_savedModel= json_file.read()
+#load the model architecture
+model_j = tf.keras.models.model_from_json(json_savedModel,)
+
+model_j.load_weights('model\model.h5')
+
+#new_model = tf.keras.models.load_model('model')
 
 ### Excluding Imports ###
 st.title("Upload Image Test")
@@ -19,7 +28,7 @@ if uploaded_file is not None:
     img_r = np.int_(np.round(tf.image.resize(img_r, (224,224 )), 0))
     img_r = img_r.reshape(1,224,224,3)
 
-    pred = model.predict(img_r/255.)
+    pred = model_j.predict(img_r/255.)
 
 
     #st.write("")
