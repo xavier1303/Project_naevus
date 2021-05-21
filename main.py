@@ -36,7 +36,7 @@ if uploaded_file is not None:
         st.title("Malignant")
     else:
         st.title("Begnin")
-    st.image(img, caption='Uploaded Image.', width=100, use_column_width=True)
+    st.image(img_r, caption='Uploaded Image.', width=100, use_column_width=True)
 
 
 # left_column, right_column = st.beta_columns(2)
