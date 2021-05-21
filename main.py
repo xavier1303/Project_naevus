@@ -1,15 +1,34 @@
+
 import streamlit as st
+import tensorflow as tf
+import numpy as np
 from PIL import Image
+
+model = tf.keras.models.load_model('model')
 
 ### Excluding Imports ###
 st.title("Upload Image Test")
-
 uploaded_file = st.sidebar.file_uploader("Choose an image...", type="jpg")
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
-    st.write("")
-    st.write("Affichage OK")
+    img = Image.open(uploaded_file)
+
+    img = np.array(img)
+    sq_size = min(img.shape[0], img.shape[1])
+    img_r = tf.image.crop_to_bounding_box(img, np.int(round(img.shape[0] / 2 - sq_size / 2)),
+                                          np.int(round(img.shape[1] / 2 - sq_size / 2)), sq_size, sq_size)
+    img_r = np.int_(np.round(tf.image.resize(img_r, (224,224 )), 0))
+    img_r = img_r.reshape(1,224,224,3)
+
+    pred = model.predict(img_r/255.)
+
+
+    #st.write("")
+    if pred[0]>=0.5:
+        st.title("Malignant")
+    else:
+        st.title("Begnin")
+    st.image(img, caption='Uploaded Image.', width=100, use_column_width=True)
+
 
 # left_column, right_column = st.beta_columns(2)
 # # You can use a column just like st.sidebar:
