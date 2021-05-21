@@ -6,12 +6,12 @@ from PIL import Image
 import efficientnet.tfkeras
 
 
-with open("model\model.json") as json_file:
+with open("model/model.json") as json_file:
     json_savedModel= json_file.read()
 #load the model architecture
 model_j = tf.keras.models.model_from_json(json_savedModel,)
 
-model_j.load_weights('model\model.h5')
+model_j.load_weights('model/model.h5')
 
 #new_model = tf.keras.models.load_model('model')
 
